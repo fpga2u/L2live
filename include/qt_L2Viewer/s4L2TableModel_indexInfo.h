@@ -63,7 +63,7 @@ public:
             const SBE_SSZ_index_snap_t* pSnap = (SBE_SSZ_index_snap_t*)l2data->get();
             data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->TotalVolumeTrade, SSZ_L2_Qty_precision, true));    //股
             data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->TotalValueTrade, SSZ_L2_Amt_precision, true));     //元
-            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->PrevClosePx, SSZ_L2_iPrice_snap_precision));
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->PrevClosePx, SSZ_L2_iPrice_tick_precision));
             data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->LastPx, SSZ_L2_iPrice_snap_precision));
             data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->OpenPx, SSZ_L2_iPrice_snap_precision));
             data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->HighPx, SSZ_L2_iPrice_snap_precision));

@@ -47,7 +47,7 @@ void unicTreeView::mouseDoubleClickEvent(QMouseEvent* event)
 	//QMap<int, QVariant> ItemData = model->itemData(index);
 
 	if (index.row() < 0) {
-		qDebug() << "onBlankDoubleClick";
+		// qDebug() << "onBlankDoubleClick";
 		emit signal_blankDoubleClick();
 	}
 }
@@ -56,7 +56,7 @@ void unicTreeView::onDelkey()
 {
 	if (!this->currentIndex().parent().isValid())
 		return;
-	qDebug() << "onDelkey " << this->currentIndex();
+	// qDebug() << "onDelkey " << this->currentIndex();
     emit signal_delItem(this->currentIndex().data().toString());
 	_current_root->removeRow(this->currentIndex().row());
 }
@@ -98,7 +98,7 @@ void unicTreeView::onItemChanged(QWidget* editor, int hint)
     if (QLineEdit* le = qobject_cast<QLineEdit*>(editor)) {
 		int row = findChild(le->text());
         if (row < 0){
-            qDebug() << "item not found:" << le->text() << " " << currentIndex();
+            // qDebug() << "item not found:" << le->text() << " " << currentIndex();
             _current_root->removeRow(this->currentIndex().row());
             return;
         }
@@ -106,7 +106,7 @@ void unicTreeView::onItemChanged(QWidget* editor, int hint)
 			QString fmt_text;
 			if (!(*_textFormater)(le->text(), fmt_text)) {
 				_current_root->removeRow(row);
-				qDebug() << "error format, please retry!";
+				// qDebug() << "error format, please retry!";
 				return;
 			}
 			_current_root->child(row)->setText(fmt_text);
@@ -115,7 +115,7 @@ void unicTreeView::onItemChanged(QWidget* editor, int hint)
         int count = countChild(text);
 		if (count>1) {
 			_current_root->removeRow(row);
-			qDebug() << "dual input, please change!";
+			// qDebug() << "dual input, please change!";
 		    int existing_row = findChild(text);
 			this->setCurrentIndex(_current_root->child(existing_row)->index());
 			return;

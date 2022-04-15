@@ -44,7 +44,7 @@ L2Viewer::L2Viewer(QWidget *parent) :
 
 void L2Viewer::action_mode_L2DB()
 {
-    qDebug() << "not ready!";
+    // qDebug() << "not ready!";
 
 	if (this->windowTitle()==TITLE_L2_DB){
 		// ((s4SnapViewerWidgetTdxDB*)(this->centralWidget()))->onOpenTdxDB();

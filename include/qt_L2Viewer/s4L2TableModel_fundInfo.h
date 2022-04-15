@@ -44,10 +44,39 @@ public:
             data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->TotalVolumeTrade, SSH_L1Bin_VOL_precision, true));      //份
             data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->TotalValueTrade, SSH_L1Bin_AMT_precision, true));       //元
             data[std::pair<int, int>(r++, 1)] = QString::number(pSnap->NumTrades);
-            data[std::pair<int, int>(r++, 1)] = ssz_L2_timeString(pSnap->DataTimeStamp).c_str();
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
+            data[std::pair<int, int>(r++, 1)] = ssh_L1Bin_timeString(pSnap->DataTimeStamp).c_str();
             data[std::pair<int, int>(r++, 1)] = SSH_TradingPhaseParse_header(pSnap->Header.TradingPhase) + 
                                                 "\n" +
                                                 SSH_TradingPhaseParse_body(pSnap->TradingPhaseCodePack);
+        }
+        else if (pH->SecurityIDSource == __SecurityIDSource_SSZ_ && pH->MsgType == __MsgType_SSZ_FUND_SNAP__ && pH->MsgLen == sizeof(SBE_SSZ_fund_snap_t)){
+            const SBE_SSZ_fund_snap_t* pSnap = (SBE_SSZ_fund_snap_t*)l2data->get();
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->LastPx, SSZ_L2_iPrice_snap_precision));                       //元
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("深圳L2Binary无此字段");
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->OpenPx, SSZ_L2_iPrice_snap_precision));
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->HighPx, SSZ_L2_iPrice_snap_precision));
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->LowPx, SSZ_L2_iPrice_snap_precision));
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->IOPV, SSZ_L2_iPrice_snap_precision));
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->TotalVolumeTrade, SSZ_L2_Qty_precision, true));      //份
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->TotalValueTrade, SSZ_L2_Amt_precision, true));       //元
+            data[std::pair<int, int>(r++, 1)] = QString::number(pSnap->NumTrades);
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->PrevClosePx, SSZ_L2_iPrice_tick_precision));
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->AskWeightPx, SSZ_L2_iPrice_snap_precision));
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->AskWeightSize, SSZ_L2_Qty_precision));   //股
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->BidWeightPx, SSZ_L2_iPrice_snap_precision));
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->BidWeightSize, SSZ_L2_Qty_precision));   //股
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->UpLimitPx, SSZ_L2_iPrice_snap_precision));
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->DnLimitPx, SSZ_L2_iPrice_snap_precision));
+            data[std::pair<int, int>(r++, 1)] = ssz_L2_timeString(pSnap->TransactTime).c_str();
+            data[std::pair<int, int>(r++, 1)] = SSZ_TradingPhaseCodeParse(pSnap->Header.TradingPhase);
+
         }
 
         updateDataAll(data);
@@ -66,6 +95,13 @@ private:
         _row_names.push_back(QStringLiteral("成交总量"));
         _row_names.push_back(QStringLiteral("成交总金额"));
         _row_names.push_back(QStringLiteral("成交订单数"));
+        _row_names.push_back(QStringLiteral("昨收价"));
+        _row_names.push_back(QStringLiteral("委卖加权价格"));
+        _row_names.push_back(QStringLiteral("委卖量"));
+        _row_names.push_back(QStringLiteral("委买加权价格"));
+        _row_names.push_back(QStringLiteral("委买量"));
+        _row_names.push_back(QStringLiteral("涨停价"));
+        _row_names.push_back(QStringLiteral("跌停价"));
         _row_names.push_back(QStringLiteral("时间戳"));
         _row_names.push_back(QStringLiteral("\n\n交易阶段\n\n\n"));
 
@@ -79,6 +115,33 @@ private:
         _background.clear();
     }
     
+    static
+    QString SSZ_TradingPhaseCodeParse(SSZ_TradingPhaseCodePack_t code)
+    {
+        QString t0, t1;
+        switch (code.unpack.Code0)
+        {
+            case 0: t0 = QStringLiteral("启动"); break;
+            case 1: t0 = QStringLiteral("开盘集合竞价"); break;
+            case 2: t0 = QStringLiteral("连续交易"); break;
+            case 3: t0 = QStringLiteral("休市"); break;
+            case 4: t0 = QStringLiteral("收盘集合竞价"); break;
+            case 5: t0 = QStringLiteral("已闭市"); break;
+            case 6: t0 = QStringLiteral("临时停牌"); break;
+            case 7: t0 = QStringLiteral("盘后交易"); break;
+            case 8: t0 = QStringLiteral("波动性中断"); break;
+            default:t0 = QStringLiteral("无意义");
+        };
+        switch (code.unpack.Code1)
+        {
+            case 0: t1 = QStringLiteral("正常"); break;
+            case 1: t1 = QStringLiteral("全天停牌"); break;
+            default:t1 = QStringLiteral("无意义");
+        }
+
+        return t0 + "\n" + t1;
+    }
+
     static
     QString SSH_TradingPhaseParse_header(uint8_t header_TradingPhase)
     {

@@ -32,7 +32,7 @@ public:
         int r = 0;
 
         const SBE_SSH_header_t* pH = (SBE_SSH_header_t*)l2data->get();
-        //TODO: TradingPhaseCode
+
         if (pH->SecurityIDSource == __SecurityIDSource_SSH_ && pH->MsgType == __MsgType_SSH_INSTRUMENT_SNAP__ && pH->MsgLen == sizeof(SBE_SSH_instrument_snap_t)){
             const SBE_SSH_instrument_snap_t* pSnap = (SBE_SSH_instrument_snap_t*)l2data->get();
             data[std::pair<int, int>(r++, 1)] = (priceString(SSH_L2_iPrice_snap_to_fPrice(pSnap->LastPx)).c_str());
@@ -44,10 +44,12 @@ public:
             data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->TotalVolumeTrade, SSH_L2_Qty_precision, true));     //股
             data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->TotalValueTrade, SSH_L2_Amt_precision, true));      //元
             data[std::pair<int, int>(r++, 1)] = (pSnap->NumTrades);
-            data[std::pair<int, int>(r++, 1)] = (priceString(SSH_L2_iPrice_snap_to_fPrice(pSnap->AskWeightPx)).c_str());
-            data[std::pair<int, int>(r++, 1)] = (QString::number(pSnap->AskWeightSize/SSH_L2_Qty_precision));   //股
-            data[std::pair<int, int>(r++, 1)] = (priceString(SSH_L2_iPrice_snap_to_fPrice(pSnap->BidWeightPx)).c_str());
-            data[std::pair<int, int>(r++, 1)] = (QString::number(pSnap->BidWeightSize/SSH_L2_Qty_precision));   //股
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->AskWeightPx, SSZ_L2_iPrice_snap_precision));
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->AskWeightSize, SSZ_L2_Qty_precision));   //股
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->BidWeightPx, SSZ_L2_iPrice_snap_precision));
+            data[std::pair<int, int>(r++, 1)] = (v2s(pSnap->BidWeightSize, SSZ_L2_Qty_precision));   //股
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L2FAST无此字段");
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L2FAST无此字段");
             data[std::pair<int, int>(r++, 1)] = (pSnap->DataTimeStamp);
             data[std::pair<int, int>(r++, 1)] = SSH_TradingPhaseParse_header(pSnap->Header.TradingPhase) + 
                                                 "\n" +
@@ -68,7 +70,9 @@ public:
             data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
             data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
             data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
-            data[std::pair<int, int>(r++, 1)] = ssz_L2_timeString(pSnap->DataTimeStamp).c_str();
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
+            data[std::pair<int, int>(r++, 1)] = QStringLiteral("上海L1Binary无此字段");
+            data[std::pair<int, int>(r++, 1)] = ssh_L1Bin_timeString(pSnap->DataTimeStamp).c_str();
             data[std::pair<int, int>(r++, 1)] = SSH_TradingPhaseParse_header(pSnap->Header.TradingPhase) + 
                                                 "\n" +
                                                 SSH_TradingPhaseParse_body(pSnap->TradingPhaseCodePack);
@@ -88,6 +92,8 @@ public:
             data[std::pair<int, int>(r++, 1)] = (QString::number(pSnap->AskWeightSize/SSZ_L2_Qty_precision));   //股
             data[std::pair<int, int>(r++, 1)] = (priceString(SSZ_L2_iPrice_snap_to_fPrice(pSnap->BidWeightPx)).c_str());
             data[std::pair<int, int>(r++, 1)] = (QString::number(pSnap->BidWeightSize/SSZ_L2_Qty_precision));   //股
+            data[std::pair<int, int>(r++, 1)] = (priceString(SSZ_L2_iPrice_snap_to_fPrice(pSnap->UpLimitPx)).c_str());
+            data[std::pair<int, int>(r++, 1)] = (priceString(SSZ_L2_iPrice_snap_to_fPrice(pSnap->DnLimitPx)).c_str());
             data[std::pair<int, int>(r++, 1)] = (ssz_L2_timeString(pSnap->TransactTime).c_str());
             data[std::pair<int, int>(r++, 1)] = SSZ_TradingPhaseCodeParse(pSnap->Header.TradingPhase);
         }
@@ -112,6 +118,8 @@ private:
         _row_names.push_back(QStringLiteral("委卖量"));
         _row_names.push_back(QStringLiteral("委买加权价格"));
         _row_names.push_back(QStringLiteral("委买量"));
+        _row_names.push_back(QStringLiteral("涨停价"));
+        _row_names.push_back(QStringLiteral("跌停价"));
         _row_names.push_back(QStringLiteral("时间戳"));
         _row_names.push_back(QStringLiteral("\n\n交易阶段\n\n\n"));
 

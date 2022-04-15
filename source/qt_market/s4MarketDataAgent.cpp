@@ -71,6 +71,8 @@ void marketDataAgent::run()
                         }
                         break;
                     case __MsgType_SSZ_INSTRUMENT_SNAP__:
+                    case __MsgType_SSZ_OPTION_SNAP__:
+                    case __MsgType_SSZ_FUND_SNAP__:
                     case __MsgType_SSH_INSTRUMENT_SNAPx5__:
                     case __MsgType_SSH_FUND_SNAPx5__:
                     case __MsgType_SSH_OPTION_SNAPx5__:

@@ -46,6 +46,8 @@ static QList<QString> s_init_securityIDs = {
 	"sz000001",
 	"sz000997",
 	"sz300750",
+    "sz150292",
+    "sz160615",
 };
 
 snapViewerWidgetL2Live::snapViewerWidgetL2Live(QWidget *parent) :
@@ -222,6 +224,7 @@ void snapViewerWidgetL2Live::openInstrumentTab(const QString& code)
         }else if (code.size()==10){
             pInstrument = new L2Instrument(instrument_type_t::OPTION, 10, this);
         }else{
+            LCL_ERR("unknown instrument type of code {}, none of STOCK/INDEX/FUND/OPTION, cannot add to focus-list.")
             emit signal_closeSnapTab(code);
 			return;
         }

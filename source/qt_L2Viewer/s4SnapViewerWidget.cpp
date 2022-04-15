@@ -168,7 +168,7 @@ bool transCode(const QString& raw_code, QString& mktCode)
             }
         }
     }
-    qDebug() << code.size();
+    // qDebug() << code.size();
     std::string mktCodeStr;
     if (code.size() == 8){  //stock,index,fund
         try{
@@ -176,7 +176,7 @@ bool transCode(const QString& raw_code, QString& mktCode)
             mktCode = code;
             return true;
         }catch(Exception& e){
-            qDebug() << e.what();
+            // qDebug() << e.what();
         }
         try{
             mktCodeStr = pureCodeStr_to_mktCodeStr(code.toStdString());
@@ -184,7 +184,7 @@ bool transCode(const QString& raw_code, QString& mktCode)
             mktCodeStr_to_mktCodeInt(mktCodeStr);
             return true;
         }catch(Exception& e){
-            qDebug() << e.what();
+            // qDebug() << e.what();
         }
     }else if (code.size() == 10){   //option
         try{
@@ -192,7 +192,7 @@ bool transCode(const QString& raw_code, QString& mktCode)
             mktCode = code;
             return true;
         }catch(Exception& e){
-            qDebug() << e.what();
+            // qDebug() << e.what();
         }
     }
     return false;

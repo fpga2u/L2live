@@ -11,7 +11,7 @@ inline bool fileCanBeOpened(const QString &path){
     QFile file(path);
     file.open(QIODevice::ReadOnly);
     if(!file.isOpen()){
-        qDebug() << "File can't be opened, path: " << path;
+        // qDebug() << "File can't be opened, path: " << path;
         return false;
     }
 
