@@ -21,7 +21,7 @@ class L2Instrument_tabSnap: public QTabWidget
 {
     Q_OBJECT
 public:
-    L2Instrument_tabSnap(instrument_type_t type, QWidget *parent = nullptr);
+    L2Instrument_tabSnap(instrument_type_t type, int snapLeves_nb, QWidget *parent = nullptr);
 
     void mouseMoveEvent(QMouseEvent* )
     {

@@ -66,6 +66,40 @@ public:
                 r++;
             }
         }else 
+        if (pH->SecurityIDSource == __SecurityIDSource_SSZ_ && pH->MsgType == __MsgType_SSZ_FUND_SNAP__ && pH->MsgLen == sizeof(SBE_SSZ_fund_snap_t))
+        {//数据有10档
+            const int snap_lv_size = 10;
+            const SBE_SSZ_fund_snap_t* pSnap = (SBE_SSZ_fund_snap_t*)l2data->get();
+            r = _side_levels_nb - snap_lv_size;   //允许表格展示更多，如有11档则从#1行开始展示
+            if (r < 0) r = 0;           //允许表格展示更少，如只展示9档，则从#0行开始展示
+            for (int i=_side_levels_nb>snap_lv_size?(snap_lv_size-1):_side_levels_nb-1; i>=0; --i){  //从行数档开始展示，若行数超过10则从十档开始
+                data[std::pair<int, int>(r, 1)] = SSZ_L2_iPrice_snap_to_fPrice(pSnap->AskLevel[i].Price);       //元
+                data[std::pair<int, int>(r, 2)] = (float)pSnap->AskLevel[i].Qty/SSZ_L2_Qty_precision;           //股
+                r++;
+            }
+            for (int i=0; i<snap_lv_size && i<_side_levels_nb; ++i){
+                data[std::pair<int, int>(r, 1)] = SSZ_L2_iPrice_snap_to_fPrice(pSnap->BidLevel[i].Price);
+                data[std::pair<int, int>(r, 2)] = (float)pSnap->BidLevel[i].Qty/SSZ_L2_Qty_precision;
+                r++;
+            }
+        }else 
+        if (pH->SecurityIDSource == __SecurityIDSource_SSZ_ && pH->MsgType == __MsgType_SSZ_OPTION_SNAP__ && pH->MsgLen == sizeof(SBE_SSZ_option_snap_t))
+        {//数据有10档
+            const int snap_lv_size = 10;
+            const SBE_SSZ_option_snap_t* pSnap = (SBE_SSZ_option_snap_t*)l2data->get();
+            r = _side_levels_nb - snap_lv_size;   //允许表格展示更多，如有11档则从#1行开始展示
+            if (r < 0) r = 0;           //允许表格展示更少，如只展示9档，则从#0行开始展示
+            for (int i=_side_levels_nb>snap_lv_size?(snap_lv_size-1):_side_levels_nb-1; i>=0; --i){  //从行数档开始展示，若行数超过10则从十档开始
+                data[std::pair<int, int>(r, 1)] = SSZ_L2_iPrice_snap_to_fPrice(pSnap->AskLevel[i].Price);       //元
+                data[std::pair<int, int>(r, 2)] = (float)pSnap->AskLevel[i].Qty/SSZ_L2_Qty_precision;           //股
+                r++;
+            }
+            for (int i=0; i<snap_lv_size && i<_side_levels_nb; ++i){
+                data[std::pair<int, int>(r, 1)] = SSZ_L2_iPrice_snap_to_fPrice(pSnap->BidLevel[i].Price);
+                data[std::pair<int, int>(r, 2)] = (float)pSnap->BidLevel[i].Qty/SSZ_L2_Qty_precision;
+                r++;
+            }
+        }else 
         if (pH->SecurityIDSource == __SecurityIDSource_SSH_ && pH->MsgType == __MsgType_SSH_INSTRUMENT_SNAPx5__ && pH->MsgLen == sizeof(SBE_SSH_instrument_snapx5_t))
         {//数据有5档
             const int snap_lv_size = 5;

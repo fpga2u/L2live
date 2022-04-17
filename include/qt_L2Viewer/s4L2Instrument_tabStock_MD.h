@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "qt_common/sharedCharArray_ptr.h"
+#include "qt_L2Viewer/s4L2Instrument_def.h"
 
 #include <QWidget>
 #include <QKeyEvent>
@@ -21,7 +22,7 @@ class L2Instrument_tabStock_MD: public QWidget
 {
     Q_OBJECT
 public:
-    L2Instrument_tabStock_MD(int snapLeves_nb,QWidget *parent = nullptr);
+    L2Instrument_tabStock_MD(instrument_type_t type, int snapLeves_nb,QWidget *parent = nullptr);
 
     void mouseMoveEvent(QMouseEvent* )
     {

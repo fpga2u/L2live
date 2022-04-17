@@ -3,14 +3,22 @@
 namespace S4{
 namespace QT{
     
-L2Instrument_tabStock::L2Instrument_tabStock(int snapLeves_nb, QWidget *parent):
+L2Instrument_tabStock::L2Instrument_tabStock(instrument_type_t type, int snapLeves_nb, QWidget *parent):
     QTabWidget(parent)
 {
     setMouseTracking(true);
 
-    _market = new L2Instrument_tabStock_MD(snapLeves_nb, this);
+    _market = new L2Instrument_tabStock_MD(type, snapLeves_nb, this);
 
-	addTab(_market, QStringLiteral("L1/L2行情数据"));
+    if (type==instrument_type_t::STOCK){
+	    addTab(_market, QStringLiteral("L1/L2股票数据"));
+    }else if (type==instrument_type_t::FUND){
+	    addTab(_market, QStringLiteral("L1/L2基金数据"));
+    }else if (type==instrument_type_t::OPTION){
+	    addTab(_market, QStringLiteral("L1/L2期权数据"));
+    }else{
+	    addTab(_market, QStringLiteral("错误类型"));
+    }
 	setCurrentIndex(0);
 
 	connect(this, &L2Instrument_tabStock::signal_L2Data_instrument_snap, (L2Instrument_tabStock_MD*)_market, &L2Instrument_tabStock_MD::onL2Data_instrument_snap);

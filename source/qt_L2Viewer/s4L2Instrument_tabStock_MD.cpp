@@ -2,6 +2,8 @@
 #include "qt_L2Viewer/s4L2TableModel_order.h"
 #include "qt_L2Viewer/s4L2TableModel_exec.h"
 #include "qt_L2Viewer/s4L2TableModel_snapInfo.h"
+#include "qt_L2Viewer/s4L2TableModel_fundInfo.h"
+#include "qt_L2Viewer/s4L2TableModel_optionInfo.h"
 #include "qt_L2Viewer/s4SnapTableModel_level.h"
 
 #include <QGridLayout>
@@ -13,7 +15,7 @@
 namespace S4{
 namespace QT{
     
-L2Instrument_tabStock_MD::L2Instrument_tabStock_MD(int snapLeves_nb, QWidget *parent):
+L2Instrument_tabStock_MD::L2Instrument_tabStock_MD(instrument_type_t type, int snapLeves_nb, QWidget *parent):
     QWidget(parent)
 {
     setMouseTracking(true);
@@ -47,7 +49,15 @@ L2Instrument_tabStock_MD::L2Instrument_tabStock_MD(int snapLeves_nb, QWidget *pa
 
     _info_tv = new QTableView(this);
     _info_tv->setItemDelegate(delegate);
-    snapTableModel_snapInfo_L2* infos = new snapTableModel_snapInfo_L2(_info_tv);
+    s4L2TableModelUpdate* infos;
+    if (type==instrument_type_t::FUND){
+        infos = new snapTableModel_fundInfo_L2(_info_tv);
+    }else if (type==instrument_type_t::OPTION){ //TODO:
+        infos = new snapTableModel_optionInfo_L2(_info_tv);
+    }else{
+        infos = new snapTableModel_snapInfo_L2(_info_tv);
+    }
+
     _info_tv->setModel(infos);
     _info_tv->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     _info_tv->horizontalHeader()->setVisible(false);
@@ -61,7 +71,13 @@ L2Instrument_tabStock_MD::L2Instrument_tabStock_MD(int snapLeves_nb, QWidget *pa
     _info_tv->setSelectionMode(QAbstractItemView::SelectionMode::NoSelection);	//限制选择
     _info_tv->setMaximumWidth(250);
     _info_tv->setMinimumWidth(150);
-    connect(this, &L2Instrument_tabStock_MD::signal_L2Data_instrument_snap, infos, &snapTableModel_snapInfo_L2::refreshL2);
+    if (type==instrument_type_t::FUND){
+        connect(this, &L2Instrument_tabStock_MD::signal_L2Data_instrument_snap, (snapTableModel_fundInfo_L2*)infos, &snapTableModel_fundInfo_L2::refreshL2);
+    }else if (type==instrument_type_t::OPTION){ //TODO:
+        connect(this, &L2Instrument_tabStock_MD::signal_L2Data_instrument_snap, (snapTableModel_optionInfo_L2*)infos, &snapTableModel_optionInfo_L2::refreshL2);
+    }else{
+        connect(this, &L2Instrument_tabStock_MD::signal_L2Data_instrument_snap, (snapTableModel_snapInfo_L2*)infos, &snapTableModel_snapInfo_L2::refreshL2);
+    }
     {
         const int nNumRows = infos->rowCount(QModelIndex());
         _info_tv->resizeRowsToContents();

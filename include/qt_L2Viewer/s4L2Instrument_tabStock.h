@@ -8,7 +8,7 @@
 #include <QTabWidget>
 #include <QDebug>
 #include <QMouseEvent>
-
+#include "qt_L2Viewer/s4L2Instrument_def.h"
 
 namespace S4{
 namespace QT{
@@ -20,7 +20,7 @@ class L2Instrument_tabStock: public QTabWidget
 {
     Q_OBJECT
 public:
-    L2Instrument_tabStock(int snapLeves_nb, QWidget *parent = nullptr);
+    L2Instrument_tabStock(instrument_type_t type, int snapLeves_nb, QWidget *parent = nullptr);
 
     void mouseMoveEvent(QMouseEvent* )
     {

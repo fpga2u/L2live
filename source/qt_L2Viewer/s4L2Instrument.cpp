@@ -24,7 +24,7 @@ L2Instrument::L2Instrument(enum instrument_type_t type, int snapLevels_nb, QWidg
 	// connect(_K_tab, SIGNAL(signalViewEvent(std::shared_ptr<view_event>)), _indicator_tab, SLOT(slotViewEvent(std::shared_ptr<view_event>)));
 
 	if (type == instrument_type_t::STOCK) {
-		_table = new L2Instrument_tabStock(snapLevels_nb, this);
+		_table = new L2Instrument_tabStock(type, snapLevels_nb, this);
 		connect(this, &L2Instrument::signal_L2Data_instrument_snap, (L2Instrument_tabStock*)_table, &L2Instrument_tabStock::onL2Data_instrument_snap);
 		// connect(this, &L2Instrument::signal_L2Data_index_snap, (L2Instrument_tabStock*)_table, &L2Instrument_tabStock::onL2Data_index_snap);
 		connect(this, &L2Instrument::signal_L2Data_order, (L2Instrument_tabStock*)_table, &L2Instrument_tabStock::onL2Data_order);
@@ -35,11 +35,17 @@ L2Instrument::L2Instrument(enum instrument_type_t type, int snapLevels_nb, QWidg
 		connect(this, &L2Instrument::signal_L2Data_index_snap, (L2Instrument_tabIndex*)_table, &L2Instrument_tabIndex::onL2Data_index_snap);
 	}
 	else if (type == instrument_type_t::FUND || type == instrument_type_t::OPTION) {
-		_table = new L2Instrument_tabSnap(type, this);
-		connect(this, &L2Instrument::signal_L2Data_instrument_snap, (L2Instrument_tabSnap*)_table, &L2Instrument_tabSnap::onL2Data_instrument_snap);
-	}else{
+		// _table = new L2Instrument_tabSnap(type, this);
+		// connect(this, &L2Instrument::signal_L2Data_instrument_snap, (L2Instrument_tabSnap*)_table, &L2Instrument_tabSnap::onL2Data_instrument_snap);
+		_table = new L2Instrument_tabStock(type, snapLevels_nb, this);
+		connect(this, &L2Instrument::signal_L2Data_instrument_snap, (L2Instrument_tabStock*)_table, &L2Instrument_tabStock::onL2Data_instrument_snap);
+		// connect(this, &L2Instrument::signal_L2Data_index_snap, (L2Instrument_tabStock*)_table, &L2Instrument_tabStock::onL2Data_index_snap);
+		connect(this, &L2Instrument::signal_L2Data_order, (L2Instrument_tabStock*)_table, &L2Instrument_tabStock::onL2Data_order);
+		connect(this, &L2Instrument::signal_L2Data_exec, (L2Instrument_tabStock*)_table, &L2Instrument_tabStock::onL2Data_exec);
+	}
+    else{
         ERR("Illegal instrument_type_t={} take as STOCK", (int)type);   //
-		_table = new L2Instrument_tabStock(snapLevels_nb, this);
+		_table = new L2Instrument_tabStock(type, snapLevels_nb, this);
 		connect(this, &L2Instrument::signal_L2Data_instrument_snap, (L2Instrument_tabStock*)_table, &L2Instrument_tabStock::onL2Data_instrument_snap);
 		// connect(this, &L2Instrument::signal_L2Data_index_snap, (L2Instrument_tabStock*)_table, &L2Instrument_tabStock::onL2Data_index_snap);
 		connect(this, &L2Instrument::signal_L2Data_order, (L2Instrument_tabStock*)_table, &L2Instrument_tabStock::onL2Data_order);

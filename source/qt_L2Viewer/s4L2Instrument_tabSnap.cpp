@@ -3,18 +3,18 @@
 namespace S4{
 namespace QT{
     
-L2Instrument_tabSnap::L2Instrument_tabSnap(instrument_type_t type, QWidget *parent):
+L2Instrument_tabSnap::L2Instrument_tabSnap(instrument_type_t type, int snapLeves_nb, QWidget *parent):
     QTabWidget(parent),
     _type(type)
 {
     setMouseTracking(true);
 
-    _market = new L2Instrument_tabSnap_MD(type, 5, this);
+    _market = new L2Instrument_tabSnap_MD(type, snapLeves_nb, this);
 
     if (type==instrument_type_t::FUND){
-	    addTab(_market, QStringLiteral("L1基金数据"));
+	    addTab(_market, QStringLiteral("L1/L2基金数据"));
     }else if (type==instrument_type_t::OPTION){
-	    addTab(_market, QStringLiteral("L1期权数据"));
+	    addTab(_market, QStringLiteral("L1/L2期权数据"));
     }else{
 	    addTab(_market, QStringLiteral("错误类型"));
     }
