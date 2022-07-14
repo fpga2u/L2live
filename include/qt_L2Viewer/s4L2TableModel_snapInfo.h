@@ -113,7 +113,7 @@ private:
         _row_names.push_back(QStringLiteral("最低"));
         _row_names.push_back(QStringLiteral("成交总量"));
         _row_names.push_back(QStringLiteral("成交总金额"));
-        _row_names.push_back(QStringLiteral("成交订单数"));
+        _row_names.push_back(QStringLiteral("成交笔数"));
         _row_names.push_back(QStringLiteral("委卖加权价格"));
         _row_names.push_back(QStringLiteral("委卖量"));
         _row_names.push_back(QStringLiteral("委买加权价格"));

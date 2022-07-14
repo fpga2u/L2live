@@ -102,7 +102,7 @@ private:
         _row_names.push_back(QStringLiteral("虚拟匹配数量"));
         _row_names.push_back(QStringLiteral("成交总量"));
         _row_names.push_back(QStringLiteral("成交总金额"));
-        _row_names.push_back(QStringLiteral("成交订单数"));
+        _row_names.push_back(QStringLiteral("成交笔数"));
         _row_names.push_back(QStringLiteral("昨收价"));
         _row_names.push_back(QStringLiteral("委卖加权价格"));
         _row_names.push_back(QStringLiteral("委卖量"));
