@@ -165,6 +165,8 @@ private:
             case 4  : return QStringLiteral("收盘集合竞价");
             case 3  : return QStringLiteral("休市");
             case 8  : return QStringLiteral("波动性中断");
+            case 11 : return QStringLiteral("产品未上市");
+            case 12 : return QStringLiteral("交易结束");
             default : return QStringLiteral("无意义:") + QString::number(header_TradingPhase);
         }
     }
